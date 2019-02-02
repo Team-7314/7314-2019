@@ -7,11 +7,12 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.drivetrain;
 
 public class Robot extends TimedRobot {
@@ -20,13 +21,31 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-   this.dt = new drivetrain();
-   this.oi = new OI();
+   dt = new drivetrain();
+   oi = new OI();
+
+   // Initialize all motor controllers and joysticks here
+   RobotMap.portTalon = new TalonSRX(0);
+   RobotMap.starboardTalon = new TalonSRX(1);
+   RobotMap.portVictor = new VictorSPX(0);
+   RobotMap.starboardVictor = new VictorSPX(1);
+
+   // Set Victors to follower mode, following corresponding Talons
+   RobotMap.portVictor.follow(RobotMap.portTalon);
+   RobotMap.starboardVictor.follow(RobotMap.starboardTalon);
+
   }
 
   
   @Override
   public void robotPeriodic() {
+    double currx = oi.getDriverRightStickX();
+    double curry = oi.getDriverRightStickY();
+
+    RobotMap.portTalon.set(ControlMode.PercentOutput, 
+      currx + curry);
+    RobotMap.starboardTalon.set(ControlMode.PercentOutput,  
+      currx - curry);
   }
 
   @Override
@@ -46,6 +65,10 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
+    
+    RobotMap.portTalon.set(ControlMode.PercentOutput, 0.5); // Set portside to half speed
+    RobotMap.starboardTalon.set(ControlMode.PercentOutput, -0.5); // Set starboard side to negative half speed, to ensure both sides move in the same direction
+    
   }
 
   @Override

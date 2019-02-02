@@ -7,31 +7,38 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.commands.*;
+import frc.robot.commands.TankDriveCMD;
 
 public class drivetrain extends Subsystem {
 
-  private VictorSP left1 = new VictorSP(RobotMap.LEFT_FRONT_MOTOR);
-  private VictorSP left2 = new VictorSP(RobotMap.LEFT_BACK_MOTOR);
-  private VictorSP right1 = new VictorSP(RobotMap.RIGHT_FRONT_MOTOR);
-  private VictorSP right2 = new VictorSP(RobotMap.RIGHT_BACK_MOTOR);
+  //private TalonSRX left1 = new TalonSRX(RobotMap.LEFT_FRONT_MOTOR);
+  //private VictorSPX left2 = new VictorSPX(RobotMap.LEFT_BACK_MOTOR);
+  //private TalonSRX right1 = new TalonSRX(RobotMap.RIGHT_FRONT_MOTOR);
+  //private VictorSPX right2 = new VictorSPX(RobotMap.RIGHT_BACK_MOTOR);
 
 
 public drivetrain(){
-  right1.setInverted(true);
-  right2.setInverted(true);
+  //right1.setInverted(true);
+  //right2.setInverted(true);
 }
 
 
 public void drive(double leftPow, double rightPow){
-  left1.set(leftPow);
-  left2.set(leftPow);
-  right1.set(rightPow);
-  right2.set(rightPow);
-}
+  //RobotMap.portTalon.set(ControlMode.PercentOutput, 0.5); // Set portside to half speed
+  //RobotMap.starboardTalon.set(ControlMode.PercentOutput, -0.5); // Set starboard side to negative half speed, to ensure both sides move in the same direction
+  
+  //left1.set(ControlMode.PercentOutput, leftPow);
+ // left2.set(ControlMode.PercentOutput, leftPow);
+  //right1.set(ControlMode.PercentOutput, rightPow);
+  //right2.set(ControlMode.PercentOutput, rightPow);
+} 
 
 
   @Override

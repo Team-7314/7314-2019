@@ -1,4 +1,4 @@
-
+ 
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -9,7 +9,7 @@ public class OI {
     private static final double STICK_DEADBAND = 0.05;
     public OI() {
 
-    }
+    } 
     private static double stickDeadband(double value, double deadband, double center) {
         return (value < (center + deadband) && value > (center - deadband)) ? center : value;
     }

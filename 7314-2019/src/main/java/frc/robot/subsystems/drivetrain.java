@@ -14,7 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.commands.TankDriveCMD;
+import frc.robot.commands.DriveCMD;
 
 public class drivetrain extends Subsystem {
 
@@ -30,14 +30,10 @@ public drivetrain(){
 }
 
 
-public void drive(double leftPow, double rightPow){
-  //RobotMap.portTalon.set(ControlMode.PercentOutput, 0.5); // Set portside to half speed
-  //RobotMap.starboardTalon.set(ControlMode.PercentOutput, -0.5); // Set starboard side to negative half speed, to ensure both sides move in the same direction
-  
-  //left1.set(ControlMode.PercentOutput, leftPow);
- // left2.set(ControlMode.PercentOutput, leftPow);
-  //right1.set(ControlMode.PercentOutput, rightPow);
-  //right2.set(ControlMode.PercentOutput, rightPow);
+public static void drive(double leftPow, double rightPow){
+
+  RobotMap.portTalon.set(ControlMode.PercentOutput, leftPow);
+  RobotMap.starboardTalon.set(ControlMode.PercentOutput, rightPow);
 } 
 
 
@@ -45,6 +41,6 @@ public void drive(double leftPow, double rightPow){
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-    setDefaultCommand(new TankDriveCMD());
+    setDefaultCommand(new DriveCMD());
   }
 }

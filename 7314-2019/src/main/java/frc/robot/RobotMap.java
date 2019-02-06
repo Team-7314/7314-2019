@@ -5,7 +5,12 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.Joystick;
+
 public class RobotMap {
+
+  public static Joystick driverStick;
+  public static int driverStickPort = 0;
 
   public static final int LEFT_FRONT_MOTOR = 0;
   public static final int LEFT_BACK_MOTOR = 0;

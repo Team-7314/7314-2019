@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.subsystems.drivetrain;
@@ -25,6 +26,7 @@ public class Robot extends TimedRobot {
    oi = new OI();
 
    // Initialize all motor controllers and joysticks here
+   RobotMap.driverStick = new Joystick(RobotMap.driverStickPort);
    RobotMap.portTalon = new TalonSRX(0);
    RobotMap.starboardTalon = new TalonSRX(1);
    RobotMap.portVictor = new VictorSPX(0);
@@ -39,13 +41,10 @@ public class Robot extends TimedRobot {
   
   @Override
   public void robotPeriodic() {
-    double currx = oi.getDriverRightStickX();
-    double curry = oi.getDriverRightStickY();
+    double curry = RobotMap.driverStick.getRawAxis(1);
+    double currx = RobotMap.driverStick.getRawAxis(2);
 
-    RobotMap.portTalon.set(ControlMode.PercentOutput, 
-      currx + curry);
-    RobotMap.starboardTalon.set(ControlMode.PercentOutput,  
-      currx - curry);
+	  Robot.dt.drive(currx + curry, currx - curry);
   }
 
   @Override
@@ -66,8 +65,8 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
     
-    RobotMap.portTalon.set(ControlMode.PercentOutput, 0.5); // Set portside to half speed
-    RobotMap.starboardTalon.set(ControlMode.PercentOutput, -0.5); // Set starboard side to negative half speed, to ensure both sides move in the same direction
+    //RobotMap.portTalon.set(ControlMode.PercentOutput, 0.5); // Set portside to half speed
+    //RobotMap.starboardTalon.set(ControlMode.PercentOutput, -0.5); // Set starboard side to negative half speed, to ensure both sides move in the same direction
     
   }
 

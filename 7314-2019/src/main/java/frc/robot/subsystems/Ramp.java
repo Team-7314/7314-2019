@@ -9,35 +9,32 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.commands.DriveCMD;
 
-public class drivetrain extends Subsystem {
-
-  //private TalonSRX left1 = new TalonSRX(RobotMap.LEFT_FRONT_MOTOR);
-  //private VictorSPX left2 = new VictorSPX(RobotMap.LEFT_BACK_MOTOR);
-  //private TalonSRX right1 = new TalonSRX(RobotMap.RIGHT_FRONT_MOTOR);
-  //private VictorSPX right2 = new VictorSPX(RobotMap.RIGHT_BACK_MOTOR);
-
-
-public drivetrain(){
-  //right1.setInverted(true);
-  //right2.setInverted(true);
-}
-
-
-public static void drive(double leftPow, double rightPow){
-
-  RobotMap.portTalon.set(ControlMode.PercentOutput, leftPow);
-  RobotMap.starboardTalon.set(ControlMode.PercentOutput, rightPow);
-} 
-
+/**
+ * Add your docs here.
+ */
+public class Ramp extends Subsystem {
+  // Put methods for controlling this subsystem
+  // here. Call these from Commands.
 
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-    setDefaultCommand(new DriveCMD());
+  }
+
+  public static void moveRampUp() {
+    RobotMap.rampVictor.set(ControlMode.PercentOutput, 1);
+    Timer.delay(.1);
+    RobotMap.rampVictor.set(ControlMode.PercentOutput, 0);
+  }
+
+  public static void moveRampDown() {
+    RobotMap.rampVictor.set(ControlMode.PercentOutput, -1);
+    Timer.delay(.1);
+    RobotMap.rampVictor.set(ControlMode.PercentOutput, 0);
   }
 }

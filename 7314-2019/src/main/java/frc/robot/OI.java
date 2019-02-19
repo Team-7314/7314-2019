@@ -1,9 +1,9 @@
  
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
 
 public class OI {
+    /** 
   public Joystick driverPad = new Joystick(0);
     public Joystick opPad = new Joystick(1);
     private static final double STICK_DEADBAND = 0.05;
@@ -34,6 +34,6 @@ public class OI {
     public double getOpLeftStickX() {
         return stickDeadband(this.opPad.getRawAxis(JoystickMap.LEFT_X), STICK_DEADBAND, 0.0);
     }
-
+    **/
   
 }

@@ -27,13 +27,13 @@ public class Ramp extends Subsystem {
   }
 
   public static void moveRampUp() {
-    RobotMap.rampVictor.set(ControlMode.PercentOutput, 1);
+    RobotMap.rampVictor.set(ControlMode.PercentOutput, -1);
     Timer.delay(.1);
-    RobotMap.rampVictor.set(ControlMode.PercentOutput, 0);
+    RobotMap.rampVictor.set(ControlMode.PercentOutput, -0.1);
   }
 
   public static void moveRampDown() {
-    RobotMap.rampVictor.set(ControlMode.PercentOutput, -1);
+    RobotMap.rampVictor.set(ControlMode.PercentOutput, 0.25);
     Timer.delay(.1);
     RobotMap.rampVictor.set(ControlMode.PercentOutput, 0);
   }

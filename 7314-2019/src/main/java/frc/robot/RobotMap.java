@@ -5,6 +5,7 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class RobotMap {
@@ -30,5 +31,9 @@ public class RobotMap {
   public static VictorSPX starboardVictor; // Starboard drive VictorSPX
   public static VictorSPX rampVictor; // ramp VictorSPX
   public static VictorSPX armVictor; // arm VictorSPX
+  
+  //digital IO 
+  public static DigitalInput dio0;
+  public static DigitalInput dio1;
   
 }

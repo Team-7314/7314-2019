@@ -7,13 +7,16 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DiskGrabberArm;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.drivetrain;
@@ -23,31 +26,42 @@ public class Robot extends TimedRobot {
   public static OI oi;
   public static DiskGrabberArm arm;
   public static Ramp ramp;
+  public Boolean rampUp;
 
   @Override
   public void robotInit() {
-   dt = new drivetrain();
-   oi = new OI();
-   arm = new DiskGrabberArm();
-   ramp = new Ramp();
+    dt = new drivetrain();
+    oi = new OI();
+    arm = new DiskGrabberArm();
+    ramp = new Ramp();
+    rampUp = true;
 
-   // Initialize all motor controllers and joysticks here
-   RobotMap.driverStick = new Joystick(RobotMap.driverStickPort);
-   RobotMap.subStick = new Joystick(RobotMap.subsystemStickPort);
+    // Initialize all motor controllers and joysticks here
+    RobotMap.driverStick = new Joystick(RobotMap.driverStickPort);
+    RobotMap.subStick = new Joystick(RobotMap.subsystemStickPort);
 
-   RobotMap.portTalon = new TalonSRX(RobotMap.LEFT_FRONT_MOTOR);
-   RobotMap.starboardTalon = new TalonSRX(RobotMap.RIGHT_FRONT_MOTOR);
-   RobotMap.portVictor = new VictorSPX(RobotMap.LEFT_BACK_MOTOR);
-   RobotMap.starboardVictor = new VictorSPX(RobotMap.RIGHT_BACK_MOTOR);
-   RobotMap.armVictor = new VictorSPX(RobotMap.ARM_MOTOR);
-   RobotMap.rampVictor = new VictorSPX(RobotMap.RAMP_MOTOR);
+    RobotMap.portTalon = new TalonSRX(RobotMap.LEFT_FRONT_MOTOR);
+    RobotMap.starboardTalon = new TalonSRX(RobotMap.RIGHT_FRONT_MOTOR);
+    RobotMap.portVictor = new VictorSPX(RobotMap.LEFT_BACK_MOTOR);
+    RobotMap.starboardVictor = new VictorSPX(RobotMap.RIGHT_BACK_MOTOR);
+    RobotMap.armVictor = new VictorSPX(RobotMap.ARM_MOTOR);
+    RobotMap.rampVictor = new VictorSPX(RobotMap.RAMP_MOTOR);
 
-   // Set Victors to follower mode, following corresponding Talons
-   RobotMap.portVictor.follow(RobotMap.portTalon);
-   RobotMap.starboardVictor.follow(RobotMap.starboardTalon);
+    // Set Victors to follower mode, following corresponding Talons
+    RobotMap.portVictor.follow(RobotMap.portTalon);
+    RobotMap.starboardVictor.follow(RobotMap.starboardTalon);
 
-   // start cameraserver
-   CameraServer.getInstance().startAutomaticCapture();
+    // start cameraserver
+    CameraServer.getInstance().startAutomaticCapture();
+
+    //add positive pressure to keep ramp up
+    RobotMap.rampVictor.set(ControlMode.PercentOutput, -0.1);
+
+    //instantiate digital input
+    RobotMap.dio0 = new DigitalInput(0);
+    RobotMap.dio1 = new DigitalInput(1);
+
+  
 
   }
 
@@ -58,21 +72,27 @@ public class Robot extends TimedRobot {
     double curry = RobotMap.driverStick.getRawAxis(1);
     double currx = RobotMap.driverStick.getRawAxis(2);
 
+    currx = currx * .75;
+    curry = curry * .75;
+
     //ramp
-    double rampup = RobotMap.driverStick.getPOV(0);
-    double rampdown = RobotMap.driverStick.getPOV(4);
-
+    double rampAng = RobotMap.driverStick.getPOV(0);
     
+    //smartdash
+    SmartDashboard.putBoolean("On the Line? ", !RobotMap.dio0.get());
+    SmartDashboard.putBoolean("Ramp Up? ", !RobotMap.dio1.get());
 
-    if (Math.abs(curry) < .05) {
+    if (Math.abs(curry) < .1) {
       curry = 0;
     }
 
-    if (Math.abs(currx) < .05) {
+    if (Math.abs(currx) < .1) {
       currx = 0;
     }
 
-    System.out.println("POV " + rampup);
+    //if ((RobotMap.dio1.get() == false) && (rampUp == true)) {
+      //Robot.ramp.moveRampUp();
+    //}
 
     //button 7 - moves arm down
     //button 8 - moves arm up
@@ -83,16 +103,12 @@ public class Robot extends TimedRobot {
     else if (RobotMap.driverStick.getRawButton(8)) {
       Robot.arm.flipArmUp(); 
     }
-    else if (rampup >= 0) {
-      System.out.println("RAMPUP");
-      System.out.println("POVUP " + rampup);
-      System.out.println("POVDOWN " + rampdown);
+    else if (rampAng == 0) {
+      rampUp = true;
       Robot.ramp.moveRampUp();
     }
-    else if (rampdown >= 180) {
-      System.out.println("RAMPDOWN");
-      System.out.println("POVUP " + rampup);
-      System.out.println("POVDOWN " + rampdown);
+    else if (rampAng == 180) {
+      rampUp = false;
       Robot.ramp.moveRampDown();
     }
     else {
